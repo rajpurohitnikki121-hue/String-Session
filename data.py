@@ -1,62 +1,32 @@
-from pyrogram.types import InlineKeyboardButton
+import os
+from dotenv import load_dotenv
 
+load_dotenv()
 
-class Data:
-    generate_single_button = [InlineKeyboardButton("🔥 Start Generating Session 🔥", callback_data="generate")]
+API_ID = os.getenv("API_ID", "").strip()
+API_HASH = os.getenv("API_HASH", "").strip()
+BOT_TOKEN = os.getenv("BOT_TOKEN", "").strip()
+DATABASE_URL = os.getenv("DATABASE_URL", "").strip()
+MUST_JOIN = os.getenv("MUST_JOIN", "").strip()
 
-    home_buttons = [
-        generate_single_button,
-        [InlineKeyboardButton(text="🏠 Return Home 🏠", callback_data="home")]
-    ]
+if not API_ID:
+    print("No API_ID found. Exiting...")
+    raise SystemExit
+if not API_HASH:
+    print("No API_HASH found. Exiting...")
+    raise SystemExit
+if not BOT_TOKEN:
+    print("No BOT_TOKEN found. Exiting...")
+    raise SystemExit
 
-    generate_button = [generate_single_button]
+try:
+    API_ID = int(API_ID)
+except ValueError:
+    print("API_ID is not a valid integer. Exiting...")
+    raise SystemExit
 
-    buttons = [
-        generate_single_button,
-        [InlineKeyboardButton("✨ Bot Status and More Bot ✨", url="https://t.me/DarkiezZzz")],
-        [
-            InlineKeyboardButton("How to Use ❔", callback_data="help"),
-            InlineKeyboardButton("🎪 About 🎪", callback_data="about")
-        ],
-        [InlineKeyboardButton("♥ More Amazing bots ♥", url="https://t.me/DarkiezZzz")],
-    ]
-
-    START = """
-Hey {}
-
-Welcome to {}
-
-If you don't trust this bot, 
-1) stop reading this message
-2) delete this chat
-
-Still reading?
-You can use me to generate pyrogram (even version 2) and telethon string session. Use below buttons to learn more !
-
-By @DarkiezZzz
-    """
-
-    HELP = """
-✨ **Available Commands** ✨
-
-/about - About The Bot
-/help - This Message
-/start - Start the Bot
-/generate - Generate Session
-/cancel - Cancel the process
-/restart - Cancel the process
-"""
-
-    ABOUT = """
-**About This Bot** 
-
-Telegram Bot to generate Pyrogram and Telethon string session by @TelethonPyrobot
-
-Source Code : [Click Here](t.me/DarkiezZzz)
-
-Framework : [Pyrogram](https://docs.pyrogram.org)
-
-Language : [Python](https://www.python.org)
-
-Developer : @DarkiezZzz
-    """
+# DATABASE_URL optional: agar nahi diya to local SQLite file use hogi
+if not DATABASE_URL:
+    DATABASE_URL = "sqlite:///sessions.db"
+elif DATABASE_URL.startswith("postgres://"):
+    DATABASE_URL = DATABASE_URL.replace("postgres://", "postgresql://", 1)
