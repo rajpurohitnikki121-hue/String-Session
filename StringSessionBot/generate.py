@@ -2,7 +2,6 @@ from data import Data
 from pyrogram.types import Message
 from telethon import TelegramClient
 from pyrogram import Client, filters
-from pyrogram1 import Client as Client1
 from asyncio.exceptions import TimeoutError
 from telethon.sessions import StringSession
 from pyrogram.types import InlineKeyboardMarkup, InlineKeyboardButton
@@ -14,14 +13,25 @@ from pyrogram.errors import (
     SessionPasswordNeeded,
     PasswordHashInvalid
 )
-from pyrogram1.errors import (
-    ApiIdInvalid as ApiIdInvalid1,
-    PhoneNumberInvalid as PhoneNumberInvalid1,
-    PhoneCodeInvalid as PhoneCodeInvalid1,
-    PhoneCodeExpired as PhoneCodeExpired1,
-    SessionPasswordNeeded as SessionPasswordNeeded1,
-    PasswordHashInvalid as PasswordHashInvalid1
-)
+try:
+    from pyrogram1 import Client as Client1
+    from pyrogram1.errors import (
+        ApiIdInvalid as ApiIdInvalid1,
+        PhoneNumberInvalid as PhoneNumberInvalid1,
+        PhoneCodeInvalid as PhoneCodeInvalid1,
+        PhoneCodeExpired as PhoneCodeExpired1,
+        SessionPasswordNeeded as SessionPasswordNeeded1,
+        PasswordHashInvalid as PasswordHashInvalid1
+    )
+except Exception as _e:  # pyrogram1 kharab/conflict ho to bot phir bhi chalega
+    print(f"pyrogram1 load nahi hua ({_e}); old Pyrogram option v2 client use karega.")
+    Client1 = Client
+    ApiIdInvalid1 = ApiIdInvalid
+    PhoneNumberInvalid1 = PhoneNumberInvalid
+    PhoneCodeInvalid1 = PhoneCodeInvalid
+    PhoneCodeExpired1 = PhoneCodeExpired
+    SessionPasswordNeeded1 = SessionPasswordNeeded
+    PasswordHashInvalid1 = PasswordHashInvalid
 from telethon.errors import (
     ApiIdInvalidError,
     PhoneNumberInvalidError,
